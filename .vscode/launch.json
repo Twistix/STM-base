@@ -1,0 +1,28 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "GDB",
+            "type": "cppdbg",
+            "request": "launch",
+            "miDebuggerPath": "/opt/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi/bin/arm-none-eabi-gdb",
+            "targetArchitecture": "arm",
+            "cwd": "${workspaceFolder}",
+            "program": "${workspaceFolder}/build/STM32_project.elf",
+            "setupCommands": [
+                {
+                    "text": "target remote localhost:3333"
+                },
+                {
+                    "text": "file ${workspaceFolder}/build/STM32_project.elf"
+                },
+                {
+                    "text": "file ${workspaceFolder}/build/STM32_project.elf"
+                },
+                {
+                    "text": "monitor reset init"
+                }
+            ],
+        }
+    ]
+}

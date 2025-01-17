@@ -1,0 +1,17 @@
+{
+    "image": "docker-registry:443/embedded/arm-gcc:13.3",
+    "remoteUser": "1000:1000",
+    "runArgs": [
+        "--network=host"
+    ],
+    "workspaceMount": "source=/home/julien/projets/stm32_base,target=/home/user/workdir,type=bind",
+    "workspaceFolder": "/home/user/workdir",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-vscode.cpptools",
+                "ms-vscode.cmake-tools",
+            ]
+        }
+    }
+}
