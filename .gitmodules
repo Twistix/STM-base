@@ -1,0 +1,3 @@
+[submodule "bsp/STM32CubeL1"]
+	path = bsp/STM32CubeL1
+	url = https://github.com/STMicroelectronics/STM32CubeL1.git
