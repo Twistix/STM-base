@@ -1,0 +1,38 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Configure STM32 Project",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "-S",
+                ".",
+                "-B",
+                "build",
+                "-DCMAKE_TOOLCHAIN_FILE=arm-gnu-toolchain.cmake"
+            ],
+            "detail": "Configure the project using CMake",
+            "problemMatcher": [],
+            "group": "build"
+        },
+        {
+            "label": "Compile STM32 Project",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "--build",
+                "build",
+                "--target",
+                "all"
+            ],
+            "dependsOn": "Configure STM32 Project",
+            "detail": "Compile the STM32 project",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ]
+}
