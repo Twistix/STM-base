@@ -21,6 +21,7 @@ int main(void)
     MX_SPI1_Init();
 
     /* ========================= TESTS ============================== */
+#if 0
     //some variables for FatFs
     FATFS FatFs; 	//Fatfs handle
     FIL fil; 		//File handle
@@ -42,8 +43,7 @@ int main(void)
     f_close(&fil);
 
     f_mount(NULL, "", 0);
-
-
+#endif
 
     /* =============================================================== */
 
