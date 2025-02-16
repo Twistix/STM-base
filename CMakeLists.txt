@@ -33,10 +33,10 @@ file(GLOB_RECURSE HAL_SRCS
 # Project source files
 set(PROJECT_SRCS
     src/main.c
-    #src/fatfs/diskio_mmc_spi.c
-    #src/fatfs/ff.c
-    #src/fatfs/ffsystem.c
-    #src/fatfs/ffunicode.c
+    src/fatfs/diskio_mmc_spi.c
+    src/fatfs/ff.c
+    src/fatfs/ffsystem.c
+    src/fatfs/ffunicode.c
 )
 
 
@@ -50,50 +50,13 @@ include_directories(
 
 
 # ========== Compilation ==========
-# Compile startup sources as static library
-add_library(startup_lib STATIC 
+add_executable(${PROJECT_NAME}.elf
     ${STARTUP_SRCS}
-)
-
-target_compile_options(startup_lib PRIVATE
-    -mcpu=cortex-m3
-    -mthumb
-    -mfloat-abi=soft
-    -Wall
-    -Wextra
-    -O0
-    -g3
-)
-
-target_compile_definitions(startup_lib PRIVATE
-    STM32L152xE
-)
-
-# Compile HAL sources as static library
-add_library(HAL_lib STATIC 
     ${HAL_SRCS}
-)
-
-target_compile_options(HAL_lib PRIVATE
-    -mcpu=cortex-m3
-    -mthumb
-    -mfloat-abi=soft
-    -Wall
-    -Wextra
-    -O0
-    -g3
-)
-
-target_compile_definitions(HAL_lib PRIVATE
-    STM32L152xE
-)
-
-# Compile project sources as executable
-add_executable(app.elf 
     ${PROJECT_SRCS}
 )
 
-target_compile_options(app.elf PRIVATE
+target_compile_options(${PROJECT_NAME}.elf PRIVATE
     -mcpu=cortex-m3
     -mthumb
     -mfloat-abi=soft
@@ -103,20 +66,21 @@ target_compile_options(app.elf PRIVATE
     -g3
 )
 
-target_compile_definitions(app.elf PRIVATE
+target_compile_definitions(${PROJECT_NAME}.elf PRIVATE
     STM32L152xE
 )
 
 
 # ========== Link ==========
-target_link_libraries(app.elf PRIVATE
-    startup_lib
-    HAL_lib
+target_link_libraries(${PROJECT_NAME}.elf PRIVATE
     -lc
     -lm
 )
 
-target_link_options(app.elf PRIVATE
+target_link_options(${PROJECT_NAME}.elf PRIVATE
+    -mcpu=cortex-m3
+    -mthumb
+    -mfloat-abi=soft
     -Wl,-T${CMAKE_SOURCE_DIR}/bsp/STM32CubeL1/Projects/NUCLEO-L152RE/Templates/SW4STM32/STM32L152RE_NUCLEO/STM32L152RETx_FLASH.ld
     -Wl,--gc-sections
 )

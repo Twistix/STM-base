@@ -5,7 +5,7 @@
             "name": "ARM GDB",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/bin/app.elf",
+            "program": "${workspaceFolder}/build/bin/STM32-SD-Card.elf",
             "cwd": "${workspaceFolder}",
             "miDebuggerServerAddress": "localhost:3333",
             "miDebuggerPath": "arm-none-eabi-gdb",
