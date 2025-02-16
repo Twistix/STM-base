@@ -11,8 +11,6 @@ extern "C" {
 
 /* Status of Disk Functions */
 typedef BYTE	DSTATUS;
-typedef DWORD FSIZE_t;
-typedef DWORD LBA_t;
 
 /* Results of Disk Functions */
 typedef enum {

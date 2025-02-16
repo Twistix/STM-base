@@ -3,7 +3,7 @@
 
 #include <string.h>
 #include "stm32l1xx_hal.h"
-//#include "fatfs/ff.h"
+#include "fatfs/ff.h"
 
 #define SD_SPI_BUS          SPI1
 #define SD_SPI_HANDLE       hspi1

@@ -5,7 +5,7 @@
             "name": "ARM GDB",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/STM32_project.elf",
+            "program": "${workspaceFolder}/build/bin/app.elf",
             "cwd": "${workspaceFolder}",
             "miDebuggerServerAddress": "localhost:3333",
             "miDebuggerPath": "arm-none-eabi-gdb",

@@ -112,6 +112,8 @@ target_compile_definitions(app.elf PRIVATE
 target_link_libraries(app.elf PRIVATE
     startup_lib
     HAL_lib
+    -lc
+    -lm
 )
 
 target_link_options(app.elf PRIVATE
