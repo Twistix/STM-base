@@ -1,9 +1,11 @@
-#include "stm32l1xx_hal.h"
+#include "main.h"
 
-// Function prototypes
-void SystemClock_Config(void);
-void MX_GPIO_Init(void);
 
+/* Globals */
+SPI_HandleTypeDef SD_SPI_HANDLE;
+
+
+/* Main function */
 int main(void)
 {
     // HAL initialization
@@ -12,19 +14,43 @@ int main(void)
     // Configure the system clock
     SystemClock_Config();
 
-    // Initialize GPIO for the LED
+    // Initialize GPIOs
     MX_GPIO_Init();
 
-    // Main loop
-    while (1)
-    {
-        // Toggle the LED (PA5)
-        HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+    // Initialize SPI1
+    MX_SPI1_Init();
 
-        // Delay for a short period (200ms)
-        HAL_Delay(200);
-    }
+    /* ========================= TESTS ============================== */
+    //some variables for FatFs
+    FATFS FatFs; 	//Fatfs handle
+    FIL fil; 		//File handle
+    FRESULT fres; //Result after operations
+    BYTE buffer[30];
+
+    //Open the file system
+    fres = f_mount(&FatFs, "", 1); //1=mount now
+
+    //Now let's try and write a file "write.txt"
+    fres = f_open(&fil, "write.txt", FA_WRITE | FA_OPEN_ALWAYS | FA_CREATE_ALWAYS);
+
+    //Copy in a string
+    strncpy((char*)buffer, "a new file is made!", 19);
+    UINT bytesWrote;
+    fres = f_write(&fil, buffer, 19, &bytesWrote);
+
+    //Be a tidy kiwi - don't forget to close your file!
+    f_close(&fil);
+
+    f_mount(NULL, "", 0);
+
+
+
+    /* =============================================================== */
+
+    // Main loop
+    while (1) {}
 }
+
 
 void SystemClock_Config(void) {
     RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
@@ -58,16 +84,34 @@ void SystemClock_Config(void) {
     HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_1);
 }
 
+
 void MX_GPIO_Init(void) {
     GPIO_InitTypeDef GPIO_InitStruct = {0};
 
-    // Enable GPIOA clock
+    /* Enable GPIO clock */
     __HAL_RCC_GPIOA_CLK_ENABLE();
 
-    // Configure PC13 (LED pin) as output push-pull
-    GPIO_InitStruct.Pin = GPIO_PIN_5;
+    /* Configure SD CS pin */
+    GPIO_InitStruct.Pin = SD_CS_Pin;
     GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+    HAL_GPIO_Init(SD_CS_GPIO_Port, &GPIO_InitStruct);
+    HAL_GPIO_WritePin(SD_CS_GPIO_Port, SD_CS_Pin, GPIO_PIN_SET);
+}
+
+
+void MX_SPI1_Init(void) {
+    SD_SPI_HANDLE.Instance = SD_SPI_BUS;
+    SD_SPI_HANDLE.Init.Mode = SPI_MODE_MASTER;  // Master mode
+    SD_SPI_HANDLE.Init.Direction = SPI_DIRECTION_2LINES;  // Full-duplex
+    SD_SPI_HANDLE.Init.DataSize = SPI_DATASIZE_8BIT;  // 8-bit data
+    SD_SPI_HANDLE.Init.CLKPolarity = SPI_POLARITY_LOW;  // CPOL = 0
+    SD_SPI_HANDLE.Init.CLKPhase = SPI_PHASE_1EDGE;  // CPHA = 0
+    SD_SPI_HANDLE.Init.NSS = SPI_NSS_SOFT;  // Software NSS (manual CS control)
+    SD_SPI_HANDLE.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_64;  // ~400kHz (low-speed init)
+    SD_SPI_HANDLE.Init.FirstBit = SPI_FIRSTBIT_MSB;  // MSB first
+    SD_SPI_HANDLE.Init.TIMode = SPI_TIMODE_DISABLE;
+    SD_SPI_HANDLE.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
+    HAL_SPI_Init(&SD_SPI_HANDLE);
 }

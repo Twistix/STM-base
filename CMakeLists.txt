@@ -36,6 +36,10 @@ file(GLOB_RECURSE HAL_SOURCES
 
 set(SRC_FILES
     ${CMAKE_SOURCE_DIR}/src/main.c
+    ${CMAKE_SOURCE_DIR}/src/fatfs/diskio_mmc_spi.c
+    ${CMAKE_SOURCE_DIR}/src/fatfs/ff.c
+    ${CMAKE_SOURCE_DIR}/src/fatfs/ffsystem.c
+    ${CMAKE_SOURCE_DIR}/src/fatfs/ffunicode.c
 )
 
 # Combine all sources
