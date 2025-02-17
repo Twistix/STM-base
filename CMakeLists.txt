@@ -32,7 +32,6 @@ file(GLOB_RECURSE HAL_SRCS
 
 # Project source files
 set(PROJECT_SRCS
-    src/stm32l1xx_hal_msp.c
     src/main.c
     src/fatfs/diskio_mmc_spi.c
     src/fatfs/ff.c

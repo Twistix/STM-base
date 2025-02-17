@@ -20,8 +20,6 @@ int main(void)
     // Initialize SPI1
     MX_SPI1_Init();
 
-    /* ========================= TESTS ============================== */
-//#if 0
     //some variables for FatFs
     FATFS FatFs; 	//Fatfs handle
     FIL fil; 		//File handle
@@ -32,10 +30,10 @@ int main(void)
     fres = f_mount(&FatFs, "", 1); //1=mount now
 
     //Now let's try and write a file "write.txt"
-    fres = f_open(&fil, "write.txt", FA_WRITE | FA_OPEN_ALWAYS | FA_CREATE_ALWAYS);
+    fres = f_open(&fil, "write2.txt", FA_WRITE | FA_OPEN_ALWAYS | FA_CREATE_ALWAYS);
 
     //Copy in a string
-    strncpy((char*)buffer, "a new file is made!", 19);
+    strncpy((char*)buffer, "a new file is made!", 20);
     UINT bytesWrote;
     fres = f_write(&fil, buffer, 19, &bytesWrote);
 
@@ -43,29 +41,9 @@ int main(void)
     f_close(&fil);
 
     f_mount(NULL, "", 0);
-//#endif
-
-    /* =============================================================== */
 
     // Main loop
     while (1) {
-#if 0
-        uint8_t test_buffer[10] = {1,2,3,4,5,6,7,8,9,10};
-
-        // Set CS low
-        HAL_GPIO_WritePin(SD_CS_GPIO_Port, SD_CS_Pin, GPIO_PIN_RESET);
-
-        // Write SPI
-        //HAL_SPI_Transmit(&SD_SPI_HANDLE, test_buffer, 10, 0);
-
-        HAL_Delay(10);
-
-        // Set CS high
-        HAL_GPIO_WritePin(SD_CS_GPIO_Port, SD_CS_Pin, GPIO_PIN_SET);
-
-        // Delay
-        HAL_Delay(100);
-#endif
     }
 }
 
@@ -76,6 +54,7 @@ void SystemClock_Config(void) {
 
     /** Configure the main internal regulator output voltage
      */
+    __HAL_RCC_PWR_CLK_ENABLE();
     __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
 
     /** Initializes the RCC Oscillators according to the specified parameters
@@ -111,9 +90,10 @@ void MX_GPIO_Init(void) {
 
     // Configure SPI1 SCK (PB3), MISO (PB4), and MOSI (PB5)
     GPIO_InitStruct.Pin = GPIO_PIN_3 | GPIO_PIN_4 | GPIO_PIN_5;
-    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;  // Push-pull mode for SPI
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Pull = GPIO_PULLUP;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+    GPIO_InitStruct.Alternate = GPIO_AF5_SPI1;
     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
     /* Configure SD CS pin */
