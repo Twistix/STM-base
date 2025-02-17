@@ -19,6 +19,12 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 
 # ========== Source files ==========
+# CMSIS source files
+set(CMSIS_SRCS
+    bsp/STM32CubeL1/Drivers/CMSIS/Device/ST/STM32L1xx/Source/Templates/gcc/startup_stm32l152xe.s
+    bsp/STM32CubeL1/Drivers/CMSIS/Device/ST/STM32L1xx/Source/Templates/system_stm32l1xx.c
+)
+
 # HAL source files
 file(GLOB_RECURSE HAL_SRCS
     bsp/STM32CubeL1/Drivers/STM32L1xx_HAL_Driver/Src/*.c
@@ -26,10 +32,6 @@ file(GLOB_RECURSE HAL_SRCS
 
 # Project source files
 set(PROJECT_SRCS
-    src/startup/startup_stm32l152xe.s
-    src/system/syscalls.c
-    src/system/sysmem.c
-    src/system/system_stm32l1xx.c
     src/stm32l1xx_hal_msp.c
     src/main.c
     src/fatfs/diskio_mmc_spi.c
@@ -50,6 +52,7 @@ include_directories(
 
 # ========== Compilation ==========
 add_executable(${PROJECT_NAME}.elf
+    ${CMSIS_SRCS}
     ${HAL_SRCS}
     ${PROJECT_SRCS}
 )
