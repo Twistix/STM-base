@@ -19,12 +19,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 
 # ========== Source files ==========
-# Startup source files
-set(STARTUP_SRCS
-    bsp/STM32CubeL1/Drivers/CMSIS/Device/ST/STM32L1xx/Source/Templates/gcc/startup_stm32l152xe.s
-    bsp/STM32CubeL1/Drivers/CMSIS/Device/ST/STM32L1xx/Source/Templates/system_stm32l1xx.c
-)
-
 # HAL source files
 file(GLOB_RECURSE HAL_SRCS
     bsp/STM32CubeL1/Drivers/STM32L1xx_HAL_Driver/Src/*.c
@@ -32,6 +26,11 @@ file(GLOB_RECURSE HAL_SRCS
 
 # Project source files
 set(PROJECT_SRCS
+    src/startup/startup_stm32l152xe.s
+    src/system/syscalls.c
+    src/system/sysmem.c
+    src/system/system_stm32l1xx.c
+    src/stm32l1xx_hal_msp.c
     src/main.c
     src/fatfs/diskio_mmc_spi.c
     src/fatfs/ff.c
@@ -51,7 +50,6 @@ include_directories(
 
 # ========== Compilation ==========
 add_executable(${PROJECT_NAME}.elf
-    ${STARTUP_SRCS}
     ${HAL_SRCS}
     ${PROJECT_SRCS}
 )
@@ -83,4 +81,5 @@ target_link_options(${PROJECT_NAME}.elf PRIVATE
     -mfloat-abi=soft
     -Wl,-T${CMAKE_SOURCE_DIR}/bsp/STM32CubeL1/Projects/NUCLEO-L152RE/Templates/SW4STM32/STM32L152RE_NUCLEO/STM32L152RETx_FLASH.ld
     -Wl,--gc-sections
+    -Wl,--allow-multiple-definition
 )
